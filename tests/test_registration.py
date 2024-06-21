@@ -21,8 +21,6 @@ class TestMesto:
         assert driver.current_url == Constants.URL_REG
 
         # Найди поле "Имя" и заполни его
-        # WebDriverWait(driver, 3).until(EC.visibility_of_element_located(Locators.REG_PAGE))
-        # assert driver.find_element(*Locators.REG_PAGE).text == 'Регистрация'
         name = "Sergei"
         driver.find_element(*Locators.REG_FIELD_NAME).send_keys(name)
         assert not driver.find_element(*Locators.REG_FIELD_NAME).get_attribute('value') == ""
@@ -30,12 +28,12 @@ class TestMesto:
         # Найди поле "Email" и заполни его
         email =  f"sergei_kravchuk10{random.randint(100, 999)}@ya.ru"
         driver.find_element(*Locators.REG_FIELD_EMAIL).send_keys(email)
-        assert driver.find_element(*Locators.REG_FIELD_EMAIL).get_attribute('value') == email # ПРОВЕРКУ НА МАСКУ ЕМАИЛ
+        assert driver.find_element(*Locators.REG_FIELD_EMAIL).get_attribute('value') == email
         
         # Найди поле "Пароль" и заполни его
         password = 'burger!'
         driver.find_element(*Locators.REG_FIELD_PWD).send_keys(password)
-        assert len(driver.find_element(*Locators.REG_FIELD_PWD).get_attribute('value')) >= 6 # type: ignore ПОДУМАТЬ ОСТАВИТЬ ТАК
+        assert len(driver.find_element(*Locators.REG_FIELD_PWD).get_attribute('value')) >= 6 
       
         # Найди кнопку "Зарегистрироваться" и кликни по ней
         driver.find_element(*Locators.REG_BUTTON).click()
@@ -46,8 +44,7 @@ class TestMesto:
         WebDriverWait(driver, 5).until(EC.visibility_of_element_located(Locators.IN_PAGE))
         assert driver.find_element(*Locators.IN_PAGE).text == 'Вход'
 
-        # Ввести в поле "Email" логин ПОПРОБОВАТЬ СОБРАТЬ В ОДИН БЛОК
-        # driver.find_element(*Locators.IN_FIELD_EMAIL).clear() # ВРОДЕ ПОЧИНИЛ, ПРОВЕРИТЬ
+        # Ввести в поле "Email" 
         driver.find_element(*Locators.IN_FIELD_EMAIL).send_keys(email)
         assert driver.find_element(*Locators.IN_FIELD_EMAIL).get_attribute('value') == email
         

@@ -5,9 +5,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from locators import Locators
 from constants import Constants
 
-
 class TestMesto:
-    # @pytest.mark.usefixture('driver') # почитать 
 
     # 1 - Проверка входа по кнопке "Войти в аккаунт" на главной
 
