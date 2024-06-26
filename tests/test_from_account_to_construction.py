@@ -1,27 +1,29 @@
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
-
 from locators import Locators
+from constants import Url
 
-# 1 - Проверка перехода по клику на «Конструктор»
 
 class TestMesto:
-    def test_transfer_to_account_by_constructor(self, login: WebDriver):
+
+
+    def test_transfer_from_account_by_constructor(self, login: WebDriver):
         driver = login
 
-        # Поиск и клик по кнопке "Конструктор"
+        WebDriverWait(driver, 5).until(EC.visibility_of_element_located(Locators.MAIN_PERSONAL_AC)).click()
+        WebDriverWait(driver, 5).until(EC.visibility_of_element_located(Locators.PERSONAL_TITLE))
         driver.find_element(*Locators.MAIN_CONSTRUCTOR).click()
-        title = WebDriverWait(driver, 5).until(EC.visibility_of_element_located(Locators.MAIN_BURGERS)).text
-        assert title == "Соберите бургер"
 
+        WebDriverWait(driver, 5).until(EC.visibility_of_element_located(Locators.MAIN_BURGERS))
+        assert  driver.current_url == Url.HOST
 
-    # 2 - Проверка перехода по клику на логотип Stellar Burgers
-
-    def test_transfer_to_account_by_logo(self, login: WebDriver):
+    def test_transfer_from_account_by_logo(self, login: WebDriver):
         driver = login
 
-        # Поиск и клик по логотипу "Stellar Burgers"
+        WebDriverWait(driver, 5).until(EC.visibility_of_element_located(Locators.MAIN_PERSONAL_AC)).click()
+        WebDriverWait(driver, 5).until(EC.visibility_of_element_located(Locators.PERSONAL_TITLE))
         driver.find_element(*Locators.MAIN_LOGO_BURGERS).click()
-        title = WebDriverWait(driver, 5).until(EC.visibility_of_element_located(Locators.MAIN_BURGERS)).text
-        assert title == "Соберите бургер"
+        
+        WebDriverWait(driver, 5).until(EC.visibility_of_element_located(Locators.MAIN_BURGERS))
+        assert  driver.current_url == Url.HOST
