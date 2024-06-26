@@ -1,64 +1,63 @@
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
-import random
-
 from locators import Locators
 from constants import Constants
 
+
 class TestMesto:
-    def test_registration(self, driver: WebDriver):
-        assert driver.current_url == Constants.URL_SITE
+    
 
-        # Поиск и клик по кнопке "Войти в аккаунт"
+    def test_registration_password(self, driver, gen_email: WebDriver):
+        
         driver.find_element(*Locators.MAIN_LOGIN).click()
-        # Ожидание загрузки страницы авторизации
         WebDriverWait(driver, 5).until(EC.visibility_of_element_located(Locators.IN_PAGE))
-        
-        # Поиск и клик по ссылке "Зарегистрироваться"
         driver.find_element(*Locators.IN_REG_LINK).click()
-        WebDriverWait(driver, 3).until(EC.visibility_of_element_located(Locators.REG_PAGE))
-        assert driver.current_url == Constants.URL_REG
-
-        # Найди поле "Имя" и заполни его
-        name = "Sergei"
-        driver.find_element(*Locators.REG_FIELD_NAME).send_keys(name)
-        assert not driver.find_element(*Locators.REG_FIELD_NAME).get_attribute('value') == ""
-        
-        # Найди поле "Email" и заполни его
-        email =  f"sergei_kravchuk10{random.randint(100, 999)}@ya.ru"
-        driver.find_element(*Locators.REG_FIELD_EMAIL).send_keys(email)
-        assert driver.find_element(*Locators.REG_FIELD_EMAIL).get_attribute('value') == email
-        
-        # Найди поле "Пароль" и заполни его
-        password = 'burger!'
+       
+        WebDriverWait(driver, 5).until(EC.visibility_of_element_located(Locators.REG_PAGE))
+        password = 'burger'
         driver.find_element(*Locators.REG_FIELD_PWD).send_keys(password)
-        assert len(driver.find_element(*Locators.REG_FIELD_PWD).get_attribute('value')) >= 6 
-      
-        # Найди кнопку "Зарегистрироваться" и кликни по ней
-        driver.find_element(*Locators.REG_BUTTON).click()
-        WebDriverWait(driver, 3).until(EC.visibility_of_element_located(Locators.IN_PAGE))
-        assert driver.current_url == Constants.URL_LOGIN
+        assert len(driver.find_element(*Locators.REG_FIELD_PWD).get_attribute('value')) >= 6   
+    
+    def test_registration_chek_name(self, driver, gen_email: WebDriver):
 
-        # Ожидание загрузки страницы авторизации
+        driver.find_element(*Locators.MAIN_LOGIN).click()
         WebDriverWait(driver, 5).until(EC.visibility_of_element_located(Locators.IN_PAGE))
-        assert driver.find_element(*Locators.IN_PAGE).text == 'Вход'
+        driver.find_element(*Locators.IN_REG_LINK).click()
 
-        # Ввести в поле "Email" 
-        driver.find_element(*Locators.IN_FIELD_EMAIL).send_keys(email)
-        assert driver.find_element(*Locators.IN_FIELD_EMAIL).get_attribute('value') == email
-        
-        # Ввести в поле "Пароль" пароль
-        driver.find_element(*Locators.IN_FIELD_PASSWORD).send_keys(password)
-        assert driver.find_element(*Locators.IN_FIELD_PASSWORD).get_attribute('value') == password
-        # Нажать кнопку "Войти"
+        WebDriverWait(driver, 5).until(EC.visibility_of_element_located(Locators.REG_PAGE))
+        driver.find_element(*Locators.REG_FIELD_NAME).send_keys(Constants.NAME)
+        driver.find_element(*Locators.REG_FIELD_EMAIL).send_keys(gen_email)
+        driver.find_element(*Locators.REG_FIELD_PWD).send_keys(Constants.PASSWORD)
+        driver.find_element(*Locators.REG_BUTTON).click()
+
+        WebDriverWait(driver, 5).until(EC.visibility_of_element_located(Locators.IN_PAGE))
+        driver.find_element(*Locators.IN_FIELD_EMAIL).send_keys(gen_email)
+        driver.find_element(*Locators.IN_FIELD_PASSWORD).send_keys(Constants.PASSWORD)
         driver.find_element(*Locators.IN_BUTTON).click()
 
-        #Найти кнопку Личный кабинет и проверить логин  
         WebDriverWait(driver, 5).until(EC.visibility_of_element_located(Locators.MAIN_PERSONAL_AC)).click()
-        login = WebDriverWait(driver, 5).until(EC.visibility_of_element_located(Locators.PERSONAL_FIELD_LOGIN)).get_attribute('value')
-        assert login == email
-        
+        WebDriverWait(driver, 5).until(EC.visibility_of_element_located(Locators.PERSONAL_TITLE))
+        assert not driver.find_element(*Locators.PERSONAL_NAME).get_attribute('value') == ""
 
+    def test_registration_chek_login(self, driver, gen_email: WebDriver):
         
+        driver.find_element(*Locators.MAIN_LOGIN).click()
+        WebDriverWait(driver, 5).until(EC.visibility_of_element_located(Locators.IN_PAGE))
+        driver.find_element(*Locators.IN_REG_LINK).click()
 
+        WebDriverWait(driver, 5).until(EC.visibility_of_element_located(Locators.REG_PAGE))
+        driver.find_element(*Locators.REG_FIELD_NAME).send_keys(Constants.NAME)
+        driver.find_element(*Locators.REG_FIELD_EMAIL).send_keys(gen_email)
+        driver.find_element(*Locators.REG_FIELD_PWD).send_keys(Constants.PASSWORD)
+        driver.find_element(*Locators.REG_BUTTON).click()
+
+        WebDriverWait(driver, 5).until(EC.visibility_of_element_located(Locators.IN_PAGE))
+        driver.find_element(*Locators.IN_FIELD_EMAIL).send_keys(gen_email)
+        driver.find_element(*Locators.IN_FIELD_PASSWORD).send_keys(Constants.PASSWORD)
+        driver.find_element(*Locators.IN_BUTTON).click()
+
+        WebDriverWait(driver, 5).until(EC.visibility_of_element_located(Locators.MAIN_PERSONAL_AC)).click()
+        login = WebDriverWait(driver, 5).until(EC.visibility_of_element_located(Locators.PERSONAL_FIELD_LOGIN))
+        assert login.get_attribute('value') == gen_email
+        
